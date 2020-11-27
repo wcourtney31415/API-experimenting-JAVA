@@ -1,12 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.Segment;
+
 public class SampleData {
 	static String actualUsername = "bob";
 	static String actualPassword = "passwordy";
 
-	static String getCalcSegments() {
-		List<TimeSegment> segments = new ArrayList<TimeSegment>();
+	static List<TimeSegment> segments = new ArrayList<TimeSegment>();
+
+	static void initialize() {
 		segments.add(new TimeSegment(720865980, 720869980));
 		segments.add(new TimeSegment(725834338, 725836338));
 		segments.add(new TimeSegment(730800696, 730800696));
@@ -100,6 +103,10 @@ public class SampleData {
 		segments.add(new TimeSegment(1167928200, 1167928200));
 		segments.add(new TimeSegment(1172892558, 1172898558));
 		segments.add(new TimeSegment(1177862916, 1177866916));
+	}
+
+	static List<CalculatedTimeSegment> getCalcSegments() {
+
 		List<CalculatedTimeSegment> calcs = new ArrayList<CalculatedTimeSegment>();
 
 		for (TimeSegment ts : segments) {
@@ -107,7 +114,11 @@ public class SampleData {
 			calcs.add(calcTimeSeg);
 		}
 
-		return actualPassword;
+		return calcs;
+	}
+
+	static void save(TimeSegment timeSegment) {
+		segments.add(timeSegment);
 	}
 
 }
