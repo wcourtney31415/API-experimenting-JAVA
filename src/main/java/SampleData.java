@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.Segment;
-
 public class SampleData {
 	static String actualUsername = "bob";
 	static String actualPassword = "passwordy";

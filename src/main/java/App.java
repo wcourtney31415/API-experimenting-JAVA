@@ -1,7 +1,6 @@
 import static spark.Spark.get;
-import static spark.Spark.*;
-
-import java.util.Date;
+import static spark.Spark.port;
+import static spark.Spark.post;
 
 import com.google.gson.Gson;
 
@@ -21,6 +20,22 @@ public class App {
 			if (authentic) {
 				Gson gson = new Gson();
 				String json = gson.toJson(SampleData.getCalcSegments());
+				return json;
+			} else {
+				res.redirect("http://www.google.com");
+				return res;
+			}
+		});
+		
+		get("/time-segment", (req, res) -> {
+			System.out.println("Get: time-segment");
+			String username = req.headers("username");
+			String password = req.headers("password");
+			boolean authentic = Methods.isAuthentic(username, password);
+			if (authentic) {
+				Gson gson = new Gson();
+				Indexed indexed = gson.fromJson(req.body(), Indexed.class);
+				String json = gson.toJson(SampleData.getCalcSegments().get(indexed.index));
 				return json;
 			} else {
 				res.redirect("http://www.google.com");
