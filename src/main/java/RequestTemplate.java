@@ -1,4 +1,5 @@
 
 public class RequestTemplate {
-	String userName, password, content;
+	public String userName, password;
+	public User content;
 }
