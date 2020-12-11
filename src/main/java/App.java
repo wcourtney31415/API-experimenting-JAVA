@@ -67,25 +67,43 @@ public class App {
 		});
 
 		post("/user", (req, res) -> {
-			  MongoClient mongoClient = new MongoClient();
-			  MongoDatabase database = mongoClient.getDatabase("Time");
-			  MongoCollection<Document> collection = database.getCollection("User");
-			  String body = req.body();
-			  Gson gson = new Gson();
-			  RequestTemplate reqTemp = gson.fromJson(body, RequestTemplate.class);
-			  User user = reqTemp.content;
-			  if (reqTemp.userName.equals("john@gmail.com") && reqTemp.password.equals("passwordy")) {
-			    Document person = new Document()
-			        .append("firstName", user.firstName)
-			        .append("lastName", user.lastName);
-			    collection.insertOne(person);
-			    mongoClient.close();
-			    res.status(200);
-			  }
-			  res.status(500);
-			  return res;
-			});
+			Gson gson = new Gson();
+			String dbName = "Time";
+			String collectionName = "User";
+			MongoClient mongoClient = new MongoClient();
+			MongoDatabase database = mongoClient.getDatabase(dbName);
+			MongoCollection<Document> collection = database.getCollection(collectionName);
+			String body = req.body();
+			RequestTemplate reqTemp = gson.fromJson(body, RequestTemplate.class);
+			User user = reqTemp.content;
+			String firstName = user.firstName,
+					lastName = user.lastName,
+					username = reqTemp.userName,
+					password = reqTemp.password;
+			boolean authentic = isAuthentic(username, password);
+			if (authentic) {
+				Document person = new Document()
+						.append("firstName", firstName)
+						.append("lastName", lastName);
+				collection.insertOne(person);
+				res.status(200);
+			} else {
+				res.status(500);
+			}
+			mongoClient.close();
+			return res;
+		});
 
+	}
+
+	static boolean isAuthentic(String username, String password) {
+		String actualUsername = "john@gmail.com";
+		String actualPassword = "passwordy";
+		boolean isAuthentic = username.equals(actualUsername) && password.equals(actualPassword);
+	}
+
+	static void print(String str) {
+		System.out.println(str);
 	}
 
 }
