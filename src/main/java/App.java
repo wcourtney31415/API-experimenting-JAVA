@@ -3,13 +3,21 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.sun.net.httpserver.Filter;
 
 public class App {
+
+	private static final Logger logger = LoggerFactory.getLogger(App.class);
 
 	public static void main(String[] args) {
 
@@ -66,33 +74,7 @@ public class App {
 			}
 		});
 
-		post("/user", (req, res) -> {
-			Gson gson = new Gson();
-			String dbName = "Time";
-			String collectionName = "User";
-			MongoClient mongoClient = new MongoClient();
-			MongoDatabase database = mongoClient.getDatabase(dbName);
-			MongoCollection<Document> collection = database.getCollection(collectionName);
-			String body = req.body();
-			RequestTemplate reqTemp = gson.fromJson(body, RequestTemplate.class);
-			User user = reqTemp.content;
-			String firstName = user.firstName,
-					lastName = user.lastName,
-					username = reqTemp.userName,
-					password = reqTemp.password;
-			boolean authentic = isAuthentic(username, password);
-			if (authentic) {
-				Document person = new Document()
-						.append("firstName", firstName)
-						.append("lastName", lastName);
-				collection.insertOne(person);
-				res.status(200);
-			} else {
-				res.status(500);
-			}
-			mongoClient.close();
-			return res;
-		});
+		UserRequests.initialize();
 
 	}
 
@@ -100,6 +82,7 @@ public class App {
 		String actualUsername = "john@gmail.com";
 		String actualPassword = "passwordy";
 		boolean isAuthentic = username.equals(actualUsername) && password.equals(actualPassword);
+		return isAuthentic;
 	}
 
 	static void print(String str) {
