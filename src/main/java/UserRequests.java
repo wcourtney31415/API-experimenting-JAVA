@@ -19,7 +19,7 @@ public class UserRequests {
 	static String dbName = "Time";
 	static String collectionName = "User";
 
-	static String doStuff(LambdaInterface lambdaInterface) {
+	static String generateBody(LambdaInterface lambdaInterface) {
 		MongoClient mongoClient = new MongoClient();
 		MongoDatabase database = mongoClient.getDatabase(dbName);
 		MongoCollection<Document> collection = database.getCollection(collectionName);
@@ -32,14 +32,14 @@ public class UserRequests {
 
 		get("/user", (req, res) -> {
 			String idString = req.params("id");
-			LambdaInterface generateBody = (collection) -> {
+			LambdaInterface lambdaFunction = (collection) -> {
 				Bson filter = Filters.eq("lastName", "Platipus");
 				FindIterable<Document> result = collection.find(filter);
 				Document document = result.first();
 				String firstName = document.get("firstName").toString();
 				return firstName;
 			};
-			String generatedBody = doStuff(generateBody);
+			String generatedBody = generateBody(lambdaFunction);
 			res.status(200);
 			return generatedBody;
 		});
