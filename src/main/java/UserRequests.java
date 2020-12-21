@@ -1,10 +1,6 @@
 import static spark.Spark.get;
 import static spark.Spark.post;
 
-import java.util.Collection;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -15,31 +11,37 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
+interface LambdaInterface {
+	String generateBody(MongoCollection<Document> collection);
+}
+
 public class UserRequests {
 	static String dbName = "Time";
 	static String collectionName = "User";
 
-	static void doStuff(Consumer<MongoCollection<Document>> con) {
+	static String doStuff(LambdaInterface lambdaInterface) {
 		MongoClient mongoClient = new MongoClient();
 		MongoDatabase database = mongoClient.getDatabase(dbName);
 		MongoCollection<Document> collection = database.getCollection(collectionName);
-		con.accept(collection);
+		String body = lambdaInterface.generateBody(collection);
 		mongoClient.close();
+		return body;
 	}
 
 	public static void initialize() {
 
 		get("/user", (req, res) -> {
 			String idString = req.params("id");
-			Object firstName = null;
-			doStuff((collection) -> {
+			LambdaInterface generateBody = (collection) -> {
 				Bson filter = Filters.eq("lastName", "Platipus");
 				FindIterable<Document> result = collection.find(filter);
 				Document document = result.first();
-				firstName = document.get("firstName");
-			});
+				String firstName = document.get("firstName").toString();
+				return firstName;
+			};
+			String generatedBody = doStuff(generateBody);
 			res.status(200);
-			return String.valueOf(firstName);
+			return generatedBody;
 		});
 
 		post("/user", (req, res) -> {
