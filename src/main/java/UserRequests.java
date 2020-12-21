@@ -1,5 +1,5 @@
 import static spark.Spark.get;
-import static spark.Spark.post;
+import static spark.Spark.*;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -29,11 +29,10 @@ public class UserRequests {
 	}
 
 	public static void initialize() {
-
 		get("/user", (req, res) -> {
 			String idString = req.params("id");
 			LambdaInterface lambdaFunction = (collection) -> {
-				Bson filter = Filters.eq("lastName", "Platipus");
+				Bson filter = Filters.eq("lastName", "Stewart");
 				FindIterable<Document> result = collection.find(filter);
 				Document document = result.first();
 				String firstName = document.get("firstName").toString();
@@ -43,7 +42,19 @@ public class UserRequests {
 			res.status(200);
 			return generatedBody;
 		});
-
+		
+		delete("/user", (req, res) -> {
+			String idString = req.params("id");
+			LambdaInterface lambdaFunction = (collection) -> {
+				Bson filter = Filters.eq("lastName", "Stewart");
+				collection.deleteOne(filter);
+				return "Deleted";
+			};
+			String generatedBody = generateBody(lambdaFunction);
+			res.status(200);
+			return generatedBody;
+		});
+		
 		post("/user", (req, res) -> {
 			Gson gson = new Gson();
 			String dbName = "Time";
