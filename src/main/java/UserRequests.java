@@ -48,28 +48,31 @@ public class UserRequests {
 			Gson gson = new Gson();
 			String dbName = "Time";
 			String collectionName = "User";
-			MongoClient mongoClient = new MongoClient();
-			MongoDatabase database = mongoClient.getDatabase(dbName);
-			MongoCollection<Document> collection = database.getCollection(collectionName);
-			String body = req.body();
-			RequestTemplate reqTemp = gson.fromJson(body, RequestTemplate.class);
-			User user = reqTemp.content;
-			String firstName = user.firstName,
-					lastName = user.lastName,
-					username = reqTemp.userName,
-					password = reqTemp.password;
-			boolean authentic = true;// isAuthentic(username, password);
-			if (authentic) {
+			LambdaInterface lambdaFunction = (collection) -> {
+				String body = req.body();
+				RequestTemplate reqTemp = gson.fromJson(body, RequestTemplate.class);
+				User user = reqTemp.content;
+				String firstName = user.firstName,
+						lastName = user.lastName,
+						username = reqTemp.userName,
+						password = reqTemp.password;
+				boolean authentic = true;// isAuthentic(username, password);
+				String resBody;
 				Document person = new Document()
 						.append("firstName", firstName)
 						.append("lastName", lastName);
-				collection.insertOne(person);
-				res.status(200);
-			} else {
-				res.status(500);
-			}
-			mongoClient.close();
-			return res;
+				if (authentic) {
+					collection.insertOne(person);
+					res.status(200);
+					resBody = "Successfully added " + person.toJson();
+				} else {
+					res.status(500);
+					resBody = "Failed to add " + person.toJson();
+				}
+				return resBody;
+			};
+			String generatedBody = generateBody(lambdaFunction);
+			return generatedBody;
 		});
 	}
 }
