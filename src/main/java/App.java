@@ -85,7 +85,7 @@ public class App {
 		return isAuthentic;
 	}
 
-	static void print(String str) {
+	public static void print(String str) {
 		System.out.println(str);
 	}
 

@@ -5,6 +5,7 @@ import static spark.Spark.put;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
@@ -12,6 +13,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+
 
 interface LambdaInterface {
 	String generateBody(MongoCollection<Document> collection);
@@ -32,32 +34,36 @@ public class UserRequests {
 
 	public static void initialize() {
 		get("/user", (req, res) -> {
+			System.out.println(0);
 			String idString = req.params("id");
+			System.out.println(1);
+			System.out.println(idString);
+			System.out.println(2);
 			LambdaInterface lambdaFunction = (collection) -> {
-				Bson filter = Filters.eq("lastName", "Stewart");
+				System.out.println(3);
+				Bson filter = Filters.eq("_id", new ObjectId("5fd2e3a4fa4be336e4c0001f"));
+				System.out.println(4);
 				FindIterable<Document> result = collection.find(filter);
+				System.out.println(5);
 				Document document = result.first();
+				System.out.println(6);
 				String firstName = document.get("firstName").toString();
+				System.out.println(7);
 				return firstName;
 			};
 			String generatedBody = generateBody(lambdaFunction);
+			System.out.println(8);
 			res.status(200);
+			System.out.println(9);
 			return generatedBody;
 		});
 
 		put("/user", (req, res) -> {
 			System.out.println("0");
 			String idString = req.params("id");
-			System.out.println("1");
 			LambdaInterface lambdaFunction = (collection) -> {
-				System.out.println("2");
 				Bson filter = Filters.eq("lastName", "Platipus");
-				System.out.println("3");
-				Document updatedDoc = new Document();
-				System.out.println("4");
-				System.out.println("5");
 				collection.updateOne(filter, new Document("$set", new Document("firstName", "Jerry")));
-				System.out.println("6");
 				return "Updated";
 			};
 			System.out.println("7");
