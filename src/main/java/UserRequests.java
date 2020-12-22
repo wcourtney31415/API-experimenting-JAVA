@@ -1,5 +1,7 @@
+import static spark.Spark.delete;
 import static spark.Spark.get;
-import static spark.Spark.*;
+import static spark.Spark.post;
+import static spark.Spark.put;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -42,19 +44,30 @@ public class UserRequests {
 			res.status(200);
 			return generatedBody;
 		});
-		
-		delete("/user", (req, res) -> {
+
+		put("/user", (req, res) -> {
+			System.out.println("0");
 			String idString = req.params("id");
+			System.out.println("1");
 			LambdaInterface lambdaFunction = (collection) -> {
-				Bson filter = Filters.eq("lastName", "Stewart");
-				collection.deleteOne(filter);
-				return "Deleted";
+				System.out.println("2");
+				Bson filter = Filters.eq("lastName", "Platipus");
+				System.out.println("3");
+				Document updatedDoc = new Document();
+				System.out.println("4");
+				System.out.println("5");
+				collection.updateOne(filter, new Document("$set", new Document("firstName", "Jerry")));
+				System.out.println("6");
+				return "Updated";
 			};
+			System.out.println("7");
 			String generatedBody = generateBody(lambdaFunction);
+			System.out.println("8");
 			res.status(200);
+			System.out.println("9");
 			return generatedBody;
 		});
-		
+
 		post("/user", (req, res) -> {
 			Gson gson = new Gson();
 			String dbName = "Time";
@@ -85,5 +98,18 @@ public class UserRequests {
 			String generatedBody = generateBody(lambdaFunction);
 			return generatedBody;
 		});
+
+		delete("/user", (req, res) -> {
+			String idString = req.params("id");
+			LambdaInterface lambdaFunction = (collection) -> {
+				Bson filter = Filters.eq("lastName", "Stewart");
+				collection.deleteOne(filter);
+				return "Deleted";
+			};
+			String generatedBody = generateBody(lambdaFunction);
+			res.status(200);
+			return generatedBody;
+		});
+
 	}
 }
