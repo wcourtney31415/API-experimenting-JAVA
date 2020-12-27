@@ -14,7 +14,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
-
 interface LambdaInterface {
 	String generateBody(MongoCollection<Document> collection);
 }
@@ -22,6 +21,7 @@ interface LambdaInterface {
 public class UserRequests {
 	static String dbName = "Time";
 	static String collectionName = "User";
+	static String routeStr = "/user";
 
 	static String generateBody(LambdaInterface lambdaInterface) {
 		MongoClient mongoClient = new MongoClient();
@@ -33,52 +33,33 @@ public class UserRequests {
 	}
 
 	public static void initialize() {
-		get("/user", (req, res) -> {
-			System.out.println(0);
-			String idString = req.params("id");
-			System.out.println(1);
-			System.out.println(idString);
-			System.out.println(2);
-			LambdaInterface lambdaFunction = (collection) -> {
-				System.out.println(3);
-				Bson filter = Filters.eq("_id", new ObjectId("5fd2e3a4fa4be336e4c0001f"));
-				System.out.println(4);
+		get(routeStr + "/:id", (req, res) -> {
+			String idString = req.params(":id");
+			String generatedBody = generateBody((collection) -> {
+				Bson filter = Filters.eq("_id", new ObjectId(idString));
 				FindIterable<Document> result = collection.find(filter);
-				System.out.println(5);
 				Document document = result.first();
-				System.out.println(6);
 				String firstName = document.get("firstName").toString();
-				System.out.println(7);
 				return firstName;
-			};
-			String generatedBody = generateBody(lambdaFunction);
-			System.out.println(8);
+			});
 			res.status(200);
-			System.out.println(9);
 			return generatedBody;
 		});
 
-		put("/user", (req, res) -> {
-			System.out.println("0");
-			String idString = req.params("id");
-			LambdaInterface lambdaFunction = (collection) -> {
-				Bson filter = Filters.eq("lastName", "Platipus");
+		put(routeStr + "/:id", (req, res) -> {
+			String idString = req.params(":id");
+			String generatedBody = generateBody((collection) -> {
+				Bson filter = Filters.eq("_id", new ObjectId(idString));
 				collection.updateOne(filter, new Document("$set", new Document("firstName", "Jerry")));
 				return "Updated";
-			};
-			System.out.println("7");
-			String generatedBody = generateBody(lambdaFunction);
-			System.out.println("8");
+			});
 			res.status(200);
-			System.out.println("9");
 			return generatedBody;
 		});
 
-		post("/user", (req, res) -> {
+		post(routeStr, (req, res) -> {
 			Gson gson = new Gson();
-			String dbName = "Time";
-			String collectionName = "User";
-			LambdaInterface lambdaFunction = (collection) -> {
+			String generatedBody = generateBody((collection) -> {
 				String body = req.body();
 				RequestTemplate reqTemp = gson.fromJson(body, RequestTemplate.class);
 				User user = reqTemp.content;
@@ -100,19 +81,17 @@ public class UserRequests {
 					resBody = "Failed to add " + person.toJson();
 				}
 				return resBody;
-			};
-			String generatedBody = generateBody(lambdaFunction);
+			});
 			return generatedBody;
 		});
 
-		delete("/user", (req, res) -> {
-			String idString = req.params("id");
-			LambdaInterface lambdaFunction = (collection) -> {
-				Bson filter = Filters.eq("lastName", "Stewart");
+		delete(routeStr + "/:id", (req, res) -> {
+			String idString = req.params(":id");
+			String generatedBody = generateBody((collection) -> {
+				Bson filter = Filters.eq("_id", new ObjectId(idString));
 				collection.deleteOne(filter);
 				return "Deleted";
-			};
-			String generatedBody = generateBody(lambdaFunction);
+			});
 			res.status(200);
 			return generatedBody;
 		});
