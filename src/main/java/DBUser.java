@@ -1,3 +1,5 @@
+import static com.mongodb.client.model.Filters.eq;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,12 +10,10 @@ import org.bson.types.ObjectId;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import static com.mongodb.client.model.Filters.eq;
 
 public class DBUser implements DBInterface<Userr> {
 	MongoClient mongoClient;
@@ -51,20 +51,23 @@ public class DBUser implements DBInterface<Userr> {
 
 	@Override
 	public void add(Userr user) {
-		// TODO Auto-generated method stub
-
+		MongoDatabase database = mongoClient.getDatabase("Time");
+		MongoCollection<Userr> collection = database.getCollection("User", Userr.class);
+		collection.insertOne(user);
 	}
 
 	@Override
 	public void update(String id, Userr user) {
-		// TODO Auto-generated method stub
-
+		MongoDatabase database = mongoClient.getDatabase("Time");
+		MongoCollection<Userr> collection = database.getCollection("User", Userr.class);
+		collection.replaceOne(eq(new ObjectId(id)), user);
 	}
 
 	@Override
 	public void remove(String id) {
-		// TODO Auto-generated method stub
-
+		MongoDatabase database = mongoClient.getDatabase("Time");
+		MongoCollection<Userr> collection = database.getCollection("User", Userr.class);
+		collection.deleteOne(eq(new ObjectId(id)));
 	}
 
 }

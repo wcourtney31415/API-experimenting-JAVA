@@ -6,15 +6,10 @@ import static spark.Spark.put;
 import java.util.List;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 
-import com.google.gson.Gson;
 import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
 
 interface LambdaInterface {
 	String generateBody(MongoCollection<Document> collection);
@@ -50,52 +45,25 @@ public class UserRequests {
 
 		put(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
-			String generatedBody = generateBody((collection) -> {
-				Bson filter = Filters.eq("_id", new ObjectId(idString));
-				collection.updateOne(filter, new Document("$set", new Document("firstName", "Jerry")));
-				return "Updated";
-			});
-			res.status(200);
-			return generatedBody;
+			Userr user = new Userr();
+			user.firstName = "this";
+			user.lastName = "was posted";
+			dbuser.update(idString, user);
+			return "Completed put";
 		});
 
 		post(routeStr, (req, res) -> {
-			Gson gson = new Gson();
-			String generatedBody = generateBody((collection) -> {
-				String body = req.body();
-				RequestTemplate reqTemp = gson.fromJson(body, RequestTemplate.class);
-				Userr user = reqTemp.content;
-				String firstName = user.firstName,
-						lastName = user.lastName,
-						username = reqTemp.userName,
-						password = reqTemp.password;
-				boolean authentic = true;// isAuthentic(username, password);
-				String resBody;
-				Document person = new Document()
-						.append("firstName", firstName)
-						.append("lastName", lastName);
-				if (authentic) {
-					collection.insertOne(person);
-					res.status(200);
-					resBody = "Successfully added " + person.toJson();
-				} else {
-					res.status(500);
-					resBody = "Failed to add " + person.toJson();
-				}
-				return resBody;
-			});
-			return generatedBody;
+			Userr user = new Userr();
+			user.firstName = "newUser";
+			user.lastName = "newuserrrrrr";
+			dbuser.add(user);
+			return "Completed post";
 		});
 
 		delete(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
-			String generatedBody = generateBody((collection) -> {
-				Bson filter = Filters.eq("_id", new ObjectId(idString));
-				collection.deleteOne(filter);
-				return "Deleted";
-			});
-			res.status(200);
-			return generatedBody;
+			dbuser.remove(idString);
+			return "Completed put";
 		});
 
 	}
