@@ -3,6 +3,8 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
+import java.util.List;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -33,17 +35,17 @@ public class UserRequests {
 	}
 
 	public static void initialize() {
+		DBUser dbuser = new DBUser();
+
 		get(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
-			String generatedBody = generateBody((collection) -> {
-				Bson filter = Filters.eq("_id", new ObjectId(idString));
-				FindIterable<Document> result = collection.find(filter);
-				Document document = result.first();
-				String firstName = document.get("firstName").toString();
-				return firstName;
-			});
-			res.status(200);
-			return generatedBody;
+			Userr user = dbuser.get(idString);
+			return user;
+		});
+		
+		get("/users", (req, res) -> {
+			List<Userr> users = dbuser.get();
+			return users;
 		});
 
 		put(routeStr + "/:id", (req, res) -> {
@@ -62,7 +64,7 @@ public class UserRequests {
 			String generatedBody = generateBody((collection) -> {
 				String body = req.body();
 				RequestTemplate reqTemp = gson.fromJson(body, RequestTemplate.class);
-				User user = reqTemp.content;
+				Userr user = reqTemp.content;
 				String firstName = user.firstName,
 						lastName = user.lastName,
 						username = reqTemp.userName,
