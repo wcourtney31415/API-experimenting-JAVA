@@ -1,3 +1,4 @@
+package database.timesegment;
 
 public class TimeSegment {
 	public TimeSegment(int startTime, int endTime) {

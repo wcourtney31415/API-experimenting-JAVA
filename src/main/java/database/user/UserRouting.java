@@ -1,3 +1,4 @@
+package database.user;
 import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -37,7 +38,7 @@ public class UserRouting {
 			Userr user = dbuser.get(idString);
 			return user;
 		});
-		
+
 		get("/users", (req, res) -> {
 			List<Userr> users = dbuser.get();
 			return users;

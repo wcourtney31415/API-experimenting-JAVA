@@ -1,7 +1,8 @@
+package src.main.java.main;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class Methods {
+public class TimeMethods {
 
 	static Date epochToDate(Long epoch) {
 		Date expiry = new Date(epoch * 1000);
