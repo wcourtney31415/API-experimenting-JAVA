@@ -18,13 +18,13 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-public class DBUser implements DBInterface<Userr> {
+public class MongoUser implements UserAdapter {
 
 	MongoClient mongoClient;
 	MongoDatabase database;
 	MongoCollection<Userr> userCollection;
 
-	public DBUser() {
+	public MongoUser() {
 
 		CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
 				getDefaultCodecRegistry(),

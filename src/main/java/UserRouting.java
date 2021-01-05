@@ -30,7 +30,7 @@ public class UserRouting {
 	}
 
 	public static void initialize() {
-		DBUser dbuser = new DBUser();
+		MongoUser dbuser = new MongoUser();
 
 		get(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");

@@ -1,6 +1,6 @@
 import java.util.List;
 
-public interface DBInterface<T> {
+public interface DBAdapter<T> {
 	T get(String id);
 	List<T> get();
 	void add(T obj);
