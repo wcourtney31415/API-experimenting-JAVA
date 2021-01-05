@@ -15,7 +15,7 @@ interface LambdaInterface {
 	String generateBody(MongoCollection<Document> collection);
 }
 
-public class UserRequests {
+public class UserRouting {
 	static String dbName = "Time";
 	static String collectionName = "User";
 	static String routeStr = "/user";

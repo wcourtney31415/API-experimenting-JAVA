@@ -1,4 +1,6 @@
+import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
 import static com.mongodb.client.model.Filters.eq;
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +8,7 @@ import java.util.List;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import com.mongodb.ConnectionString;
@@ -16,58 +19,64 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 public class DBUser implements DBInterface<Userr> {
+
 	MongoClient mongoClient;
+	MongoDatabase database;
+	MongoCollection<Userr> userCollection;
+
 	public DBUser() {
-		CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
-				CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(new ConnectionString("mongodb://localhost:27017"))
+
+		CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
+				getDefaultCodecRegistry(),
+				fromProviders(
+						PojoCodecProvider
+								.builder()
+								.automatic(true)
+								.build()));
+
+		MongoClientSettings settings = MongoClientSettings.builder()
+				.applyConnectionString(new ConnectionString("mongodb://localhost:27017"))
 				.codecRegistry(pojoCodecRegistry)
 				.build();
+
 		mongoClient = MongoClients.create(settings);
+		database = mongoClient.getDatabase("Time");
+		userCollection = database.getCollection("User", Userr.class);
+
+	}
+
+	private Bson withId(String idString) {
+		return eq(new ObjectId(idString));
 	}
 
 	@Override
-	public Userr get(String id) {
-		return mongoClient
-				.getDatabase("Time")
-				.getCollection("User", Userr.class)
+	public Userr get(String idString) {
+		return userCollection
 				.find()
-				.filter(eq(new ObjectId(id)))
+				.filter(withId(idString))
 				.first();
 	}
 
 	@Override
 	public List<Userr> get() {
-		ArrayList<Userr> users = new ArrayList<Userr>();
-		try {
-			MongoDatabase database = mongoClient.getDatabase("Time");
-			MongoCollection<Userr> collection = database.getCollection("User", Userr.class);
-			users = collection.find().into(new ArrayList<Userr>());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return users;
+		return userCollection
+				.find()
+				.into(new ArrayList<Userr>());
 	}
 
 	@Override
 	public void add(Userr user) {
-		MongoDatabase database = mongoClient.getDatabase("Time");
-		MongoCollection<Userr> collection = database.getCollection("User", Userr.class);
-		collection.insertOne(user);
+		userCollection.insertOne(user);
 	}
 
 	@Override
-	public void update(String id, Userr user) {
-		MongoDatabase database = mongoClient.getDatabase("Time");
-		MongoCollection<Userr> collection = database.getCollection("User", Userr.class);
-		collection.replaceOne(eq(new ObjectId(id)), user);
+	public void update(String idString, Userr user) {
+		userCollection.replaceOne(withId(idString), user);
 	}
 
 	@Override
-	public void remove(String id) {
-		MongoDatabase database = mongoClient.getDatabase("Time");
-		MongoCollection<Userr> collection = database.getCollection("User", Userr.class);
-		collection.deleteOne(eq(new ObjectId(id)));
+	public void remove(String idString) {
+		userCollection.deleteOne(withId(idString));
 	}
 
 }

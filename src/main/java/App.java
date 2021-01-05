@@ -9,14 +9,8 @@ public class App {
 	private static final Logger logger = LoggerFactory.getLogger(App.class);
 
 	public static void main(String[] args) {
-
-		SampleData.initialize();
-
 		port(80);
-	}
-
-	public static void print(String str) {
-		System.out.println(str);
+		UserRouting.initialize();
 	}
 
 }

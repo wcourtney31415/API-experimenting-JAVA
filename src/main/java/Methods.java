@@ -14,13 +14,6 @@ public class Methods {
 		return diff;
 	}
 
-	static boolean isAuthentic(String username, String password) {
-		boolean isValidUsername = username.equals(SampleData.actualUsername);
-		boolean isValidPassword = password.equals(SampleData.actualPassword);
-		boolean auth = isValidUsername && isValidPassword;
-		return auth;
-	}
-
 	static String secondsToTimeString(long seconds) {
 		long hours = seconds / 60 / 60;
 		long minutes = (seconds / 60) % 60;
