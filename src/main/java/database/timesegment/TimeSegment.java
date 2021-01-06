@@ -5,6 +5,10 @@ public class TimeSegment {
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
+	public TimeSegment() {
+		// TODO Auto-generated constructor stub
+	}
+	String user;
 	long startTime;
 	long endTime;
 }

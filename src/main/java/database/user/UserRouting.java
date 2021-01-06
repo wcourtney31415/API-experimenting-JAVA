@@ -1,4 +1,5 @@
 package database.user;
+
 import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -8,9 +9,7 @@ import java.util.List;
 
 import org.bson.Document;
 
-import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 
 interface LambdaInterface {
 	String generateBody(MongoCollection<Document> collection);
@@ -20,15 +19,6 @@ public class UserRouting {
 	static String dbName = "Time";
 	static String collectionName = "User";
 	static String routeStr = "/user";
-
-	static String generateBody(LambdaInterface lambdaInterface) {
-		MongoClient mongoClient = new MongoClient();
-		MongoDatabase database = mongoClient.getDatabase(dbName);
-		MongoCollection<Document> collection = database.getCollection(collectionName);
-		String body = lambdaInterface.generateBody(collection);
-		mongoClient.close();
-		return body;
-	}
 
 	public static void initialize() {
 		MongoUser dbuser = new MongoUser();
