@@ -25,13 +25,11 @@ public class UserRouting {
 
 		get(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
-			Userr user = dbuser.get(idString);
-			return user;
+			return dbuser.get(idString);
 		});
 
 		get("/users", (req, res) -> {
-			List<Userr> users = dbuser.get();
-			return users;
+			return dbuser.get();
 		});
 
 		put(routeStr + "/:id", (req, res) -> {
