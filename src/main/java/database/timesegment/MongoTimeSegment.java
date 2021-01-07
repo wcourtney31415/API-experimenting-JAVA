@@ -43,7 +43,7 @@ public class MongoTimeSegment implements TimeSegmentAdapter {
 
 		mongoClient = MongoClients.create(settings);
 		database = mongoClient.getDatabase("Time");
-		timeSegmentCollection = database.getCollection("Time-Segment", TimeSegment.class);
+		timeSegmentCollection = database.getCollection("TimeSegment", TimeSegment.class);
 
 	}
 

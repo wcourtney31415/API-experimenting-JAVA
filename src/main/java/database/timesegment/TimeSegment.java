@@ -1,14 +1,15 @@
 package database.timesegment;
+import org.bson.types.ObjectId;
 
 public class TimeSegment {
-	public TimeSegment(int startTime, int endTime) {
-		this.startTime = startTime;
-		this.endTime = endTime;
+	public ObjectId _id;
+	public String user;
+	public String startTime;
+	public String endTime;
+	
+	@Override
+	public String toString() {
+		return startTime + " " + endTime;
 	}
-	public TimeSegment() {
-		// TODO Auto-generated constructor stub
-	}
-	String user;
-	long startTime;
-	long endTime;
+	
 }

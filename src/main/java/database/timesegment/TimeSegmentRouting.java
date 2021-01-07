@@ -5,8 +5,6 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
-import java.util.List;
-
 public class TimeSegmentRouting {
 	static String dbName = "Time";
 	static String collectionName = "Time-Segment";
@@ -18,15 +16,13 @@ public class TimeSegmentRouting {
 		
 		get(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
-			TimeSegment timeSegment = mTimeSegment.get(idString);
-			return timeSegment;
+			return mTimeSegment.get(idString);
 		});
-
+		
 		get("/time-segments", (req, res) -> {
-			List<TimeSegment> timeSegments = mTimeSegment.get();
-			return timeSegments;
+			return mTimeSegment.get();
 		});
-
+		
 		put(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
 			TimeSegment timeSegment = new TimeSegment();
@@ -34,19 +30,19 @@ public class TimeSegmentRouting {
 			mTimeSegment.update(idString, timeSegment);
 			return "Completed put";
 		});
-
+		
 		post(routeStr, (req, res) -> {
 			TimeSegment timeSegment = new TimeSegment();
 			//set field properties
 			mTimeSegment.add(timeSegment);
 			return "Completed post";
 		});
-
+		
 		delete(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
 			mTimeSegment.remove(idString);
 			return "Completed put";
 		});
-
+		
 	}
 }
