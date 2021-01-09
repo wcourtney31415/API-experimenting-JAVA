@@ -1,5 +1,4 @@
-package database.timesegment;
-
+package mongoDb;
 import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
 import static com.mongodb.client.model.Filters.eq;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -20,13 +19,16 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-public class MongoTimeSegment implements TimeSegmentAdapter {
+import dbAdapter.CompanyAdapter;
+import resources.Company;
+
+public class MongoCompany implements CompanyAdapter {
 
 	MongoClient mongoClient;
 	MongoDatabase database;
-	MongoCollection<TimeSegment> timeSegmentCollection;
+	MongoCollection<Company> companyCollection;
 
-	public MongoTimeSegment() {
+	public MongoCompany() {
 
 		CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
 				getDefaultCodecRegistry(),
@@ -43,7 +45,7 @@ public class MongoTimeSegment implements TimeSegmentAdapter {
 
 		mongoClient = MongoClients.create(settings);
 		database = mongoClient.getDatabase("Time");
-		timeSegmentCollection = database.getCollection("TimeSegment", TimeSegment.class);
+		companyCollection = database.getCollection("Company", Company.class);
 
 	}
 
@@ -52,33 +54,33 @@ public class MongoTimeSegment implements TimeSegmentAdapter {
 	}
 
 	@Override
-	public TimeSegment get(String idString) {
-		return timeSegmentCollection
+	public Company get(String idString) {
+		return companyCollection
 				.find()
 				.filter(withId(idString))
 				.first();
 	}
 
 	@Override
-	public List<TimeSegment> get() {
-		return timeSegmentCollection
+	public List<Company> get() {
+		return companyCollection
 				.find()
-				.into(new ArrayList<TimeSegment>());
+				.into(new ArrayList<Company>());
 	}
 
 	@Override
-	public void add(TimeSegment obj) {
-		timeSegmentCollection.insertOne(obj);
+	public void add(Company comapny) {
+		companyCollection.insertOne(comapny);
 	}
 
 	@Override
-	public void update(String idString, TimeSegment obj) {
-		timeSegmentCollection.replaceOne(withId(idString), obj);
+	public void update(String idString, Company company) {
+		companyCollection.replaceOne(withId(idString), company);
 	}
 
 	@Override
 	public void remove(String idString) {
-		timeSegmentCollection.deleteOne(withId(idString));
+		companyCollection.deleteOne(withId(idString));
 	}
 
 }

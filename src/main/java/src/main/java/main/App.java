@@ -4,8 +4,8 @@ import static spark.Spark.port;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import database.timesegment.TimeSegmentRouting;
-import database.user.UserRouting;
+import routing.TimeSegmentRouting;
+import routing.UserRouting;
 
 public class App {
 

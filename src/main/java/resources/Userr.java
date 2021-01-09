@@ -1,4 +1,4 @@
-package database.user;
+package resources;
 import org.bson.types.ObjectId;
 
 public class Userr {

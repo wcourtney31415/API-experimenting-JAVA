@@ -1,5 +1,5 @@
-package database.user;
-import database.DBAdapter;
+package dbAdapter;
+import resources.Userr;
 
 public interface UserAdapter extends DBAdapter<Userr> {
 	

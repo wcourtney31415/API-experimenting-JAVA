@@ -1,9 +1,12 @@
-package database.timesegment;
+package routing;
 
 import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
+
+import mongoDb.MongoTimeSegment;
+import resources.TimeSegment;
 
 public class TimeSegmentRouting {
 	static String dbName = "Time";

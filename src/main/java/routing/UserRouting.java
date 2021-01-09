@@ -1,15 +1,16 @@
-package database.user;
+package routing;
 
 import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
-import java.util.List;
-
 import org.bson.Document;
 
 import com.mongodb.client.MongoCollection;
+
+import mongoDb.MongoUser;
+import resources.Userr;
 
 interface LambdaInterface {
 	String generateBody(MongoCollection<Document> collection);

@@ -1,17 +1,12 @@
-package company;
+package routing;
 
 import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
-import org.bson.Document;
-
-import com.mongodb.client.MongoCollection;
-
-interface LambdaInterface {
-	String generateBody(MongoCollection<Document> collection);
-}
+import mongoDb.MongoCompany;
+import resources.Company;
 
 public class CompanyRouting {
 	static String dbName = "Time";

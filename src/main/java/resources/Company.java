@@ -1,4 +1,4 @@
-package company;
+package resources;
 import org.bson.types.ObjectId;
 
 public class Company {

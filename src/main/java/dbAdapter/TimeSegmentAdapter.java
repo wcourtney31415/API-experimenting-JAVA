@@ -1,6 +1,6 @@
-package database.timesegment;
+package dbAdapter;
 
-import database.DBAdapter;
+import resources.TimeSegment;
 
 public interface TimeSegmentAdapter extends DBAdapter<TimeSegment> {
 

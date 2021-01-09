@@ -1,5 +1,5 @@
-package company;
-import database.DBAdapter;
+package dbAdapter;
+import resources.Company;
 
 public interface CompanyAdapter extends DBAdapter<Company> {
 	

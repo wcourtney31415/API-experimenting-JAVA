@@ -1,4 +1,4 @@
-package database;
+package dbAdapter;
 
 import java.util.List;
 

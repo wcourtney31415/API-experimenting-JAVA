@@ -1,4 +1,4 @@
-package database.timesegment;
+package resources;
 import org.bson.types.ObjectId;
 
 public class TimeSegment {

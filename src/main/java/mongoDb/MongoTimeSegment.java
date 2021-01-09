@@ -1,4 +1,5 @@
-package database.user;
+package mongoDb;
+
 import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
 import static com.mongodb.client.model.Filters.eq;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -19,13 +20,16 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-public class MongoUser implements UserAdapter {
+import dbAdapter.TimeSegmentAdapter;
+import resources.TimeSegment;
+
+public class MongoTimeSegment implements TimeSegmentAdapter {
 
 	MongoClient mongoClient;
 	MongoDatabase database;
-	MongoCollection<Userr> userCollection;
+	MongoCollection<TimeSegment> timeSegmentCollection;
 
-	public MongoUser() {
+	public MongoTimeSegment() {
 
 		CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
 				getDefaultCodecRegistry(),
@@ -42,7 +46,7 @@ public class MongoUser implements UserAdapter {
 
 		mongoClient = MongoClients.create(settings);
 		database = mongoClient.getDatabase("Time");
-		userCollection = database.getCollection("User", Userr.class);
+		timeSegmentCollection = database.getCollection("TimeSegment", TimeSegment.class);
 
 	}
 
@@ -51,33 +55,33 @@ public class MongoUser implements UserAdapter {
 	}
 
 	@Override
-	public Userr get(String idString) {
-		return userCollection
+	public TimeSegment get(String idString) {
+		return timeSegmentCollection
 				.find()
 				.filter(withId(idString))
 				.first();
 	}
 
 	@Override
-	public List<Userr> get() {
-		return userCollection
+	public List<TimeSegment> get() {
+		return timeSegmentCollection
 				.find()
-				.into(new ArrayList<Userr>());
+				.into(new ArrayList<TimeSegment>());
 	}
 
 	@Override
-	public void add(Userr user) {
-		userCollection.insertOne(user);
+	public void add(TimeSegment obj) {
+		timeSegmentCollection.insertOne(obj);
 	}
 
 	@Override
-	public void update(String idString, Userr user) {
-		userCollection.replaceOne(withId(idString), user);
+	public void update(String idString, TimeSegment obj) {
+		timeSegmentCollection.replaceOne(withId(idString), obj);
 	}
 
 	@Override
 	public void remove(String idString) {
-		userCollection.deleteOne(withId(idString));
+		timeSegmentCollection.deleteOne(withId(idString));
 	}
 
 }

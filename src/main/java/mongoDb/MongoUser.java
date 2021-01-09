@@ -1,4 +1,4 @@
-package company;
+package mongoDb;
 import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
 import static com.mongodb.client.model.Filters.eq;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -19,13 +19,16 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-public class MongoCompany implements CompanyAdapter {
+import dbAdapter.UserAdapter;
+import resources.Userr;
+
+public class MongoUser implements UserAdapter {
 
 	MongoClient mongoClient;
 	MongoDatabase database;
-	MongoCollection<Company> companyCollection;
+	MongoCollection<Userr> userCollection;
 
-	public MongoCompany() {
+	public MongoUser() {
 
 		CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
 				getDefaultCodecRegistry(),
@@ -42,7 +45,7 @@ public class MongoCompany implements CompanyAdapter {
 
 		mongoClient = MongoClients.create(settings);
 		database = mongoClient.getDatabase("Time");
-		companyCollection = database.getCollection("Company", Company.class);
+		userCollection = database.getCollection("User", Userr.class);
 
 	}
 
@@ -51,33 +54,33 @@ public class MongoCompany implements CompanyAdapter {
 	}
 
 	@Override
-	public Company get(String idString) {
-		return companyCollection
+	public Userr get(String idString) {
+		return userCollection
 				.find()
 				.filter(withId(idString))
 				.first();
 	}
 
 	@Override
-	public List<Company> get() {
-		return companyCollection
+	public List<Userr> get() {
+		return userCollection
 				.find()
-				.into(new ArrayList<Company>());
+				.into(new ArrayList<Userr>());
 	}
 
 	@Override
-	public void add(Company comapny) {
-		companyCollection.insertOne(comapny);
+	public void add(Userr user) {
+		userCollection.insertOne(user);
 	}
 
 	@Override
-	public void update(String idString, Company company) {
-		companyCollection.replaceOne(withId(idString), company);
+	public void update(String idString, Userr user) {
+		userCollection.replaceOne(withId(idString), user);
 	}
 
 	@Override
 	public void remove(String idString) {
-		companyCollection.deleteOne(withId(idString));
+		userCollection.deleteOne(withId(idString));
 	}
 
 }
