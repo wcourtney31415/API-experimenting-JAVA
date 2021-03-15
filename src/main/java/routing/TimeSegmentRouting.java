@@ -9,9 +9,9 @@ import mongoDb.MongoTimeSegment;
 import resources.TimeSegment;
 
 public class TimeSegmentRouting {
-	static String dbName = "Time";
-	static String collectionName = "Time-Segment";
-	static String routeStr = "/time-segment";
+	static String dbName = "time-logger";
+	static String collectionName = "timeSegment";
+	static String routeStr = "/time";
 
 	public static void initialize() {
 		
@@ -19,10 +19,12 @@ public class TimeSegmentRouting {
 		
 		get(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
-			return mTimeSegment.get(idString);
+			TimeSegment m = mTimeSegment.get(idString);
+			System.out.println("HELLO WORLD: " + m);
+			return m;
 		});
 		
-		get("/time-segments", (req, res) -> {
+		get(routeStr, (req, res) -> {
 			return mTimeSegment.get();
 		});
 		

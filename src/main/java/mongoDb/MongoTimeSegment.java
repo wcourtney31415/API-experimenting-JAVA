@@ -9,7 +9,7 @@ import resources.TimeSegment;
 
 public class MongoTimeSegment extends MongoResource<TimeSegment> {
 
-	MongoCollection<TimeSegment> timeSegmentCollection = getCollection("TimeSegment", TimeSegment.class);
+	MongoCollection<TimeSegment> timeSegmentCollection = getCollection("timeSegment", TimeSegment.class);
 
 	@Override
 	public TimeSegment get(String idString) {
@@ -27,13 +27,13 @@ public class MongoTimeSegment extends MongoResource<TimeSegment> {
 	}
 
 	@Override
-	public void add(TimeSegment obj) {
-		timeSegmentCollection.insertOne(obj);
+	public void add(TimeSegment timeSegment) {
+		timeSegmentCollection.insertOne(timeSegment);
 	}
 
 	@Override
-	public void update(String idString, TimeSegment obj) {
-		timeSegmentCollection.replaceOne(withId(idString), obj);
+	public void update(String idString, TimeSegment timeSegment) {
+		timeSegmentCollection.replaceOne(withId(idString), timeSegment);
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public abstract class MongoResource<T> implements DBAdapter<T> {
 				.build();
 
 		mongoClient = MongoClients.create(settings);
-		database = mongoClient.getDatabase("Time");
+		database = mongoClient.getDatabase("time-logger");
 		collection = database.getCollection(collectionName, myClass);
 		return collection;
 

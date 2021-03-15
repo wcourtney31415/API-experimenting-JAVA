@@ -13,13 +13,13 @@ import com.mongodb.client.MongoCollection;
 import mongoDb.MongoUser;
 import resources.Userr;
 
-interface LambdaInterface {
-	String generateBody(MongoCollection<Document> collection);
-}
+//interface LambdaInterface {
+//	String generateBody(MongoCollection<Document> collection);
+//}
 
 public class UserRouting {
-	static String dbName = "Time";
-	static String collectionName = "User";
+	static String dbName = "time-logger";
+	static String collectionName = "user";
 	static String routeStr = "/user";
 
 	public static void initialize() {
@@ -30,7 +30,7 @@ public class UserRouting {
 			return dbuser.get(idString);
 		});
 
-		get("/users", (req, res) -> {
+		get(routeStr, (req, res) -> {
 			return dbuser.get();
 		});
 

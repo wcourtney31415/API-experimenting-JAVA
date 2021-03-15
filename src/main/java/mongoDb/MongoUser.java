@@ -9,7 +9,7 @@ import resources.Userr;
 
 public class MongoUser extends MongoResource<Userr> {
 
-	MongoCollection<Userr> userCollection = getCollection("User", Userr.class);
+	MongoCollection<Userr> userCollection = getCollection("user", Userr.class);
 
 	@Override
 	public Userr get(String idString) {

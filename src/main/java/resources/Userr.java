@@ -8,11 +8,14 @@ public class Userr {
 	public ObjectId _id;
 	public String email,
 			passHash,
-			contact;
+			firstName,
+			lastName;
+	public ArrayList<String> boxes;
 	public ArrayList<String> timeSegments;
+
 	@Override
 	public String toString() {
-		return email;
+		String str = "User: " + firstName + " " + lastName + " :: " + email + " >> " + _id;
+		return str;
 	}
 }
-
