@@ -5,40 +5,31 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
-import org.bson.Document;
-
 import com.google.gson.Gson;
-import com.mongodb.client.MongoCollection;
 
 import mongoDb.MongoUser;
 import resources.Userr;
 
-//interface LambdaInterface {
-//	String generateBody(MongoCollection<Document> collection);
-//}
-
 public class UserRouting {
-	static String dbName = "time-logger";
-	static String collectionName = "user";
 	static String routeStr = "/user";
 
 	public static void initialize() {
-		MongoUser dbuser = new MongoUser();
+		MongoUser list = new MongoUser();
 
 		get(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
-			return dbuser.get(idString);
+			return list.get(idString);
 		});
 
 		get(routeStr, (req, res) -> {
-			return dbuser.get();
+			return list.get();
 		});
 
 		put(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
 			Userr user = new Userr();
 			user.email = "testuser@gmail.com";
-			dbuser.update(idString, user);
+			list.update(idString, user);
 			return "Completed put";
 		});
 
@@ -57,7 +48,7 @@ public class UserRouting {
 				e.printStackTrace();
 			}
 			try {
-				dbuser.add(user);
+				list.add(user);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -67,7 +58,7 @@ public class UserRouting {
 
 		delete(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
-			dbuser.remove(idString);
+			list.remove(idString);
 			return "Completed put";
 		});
 

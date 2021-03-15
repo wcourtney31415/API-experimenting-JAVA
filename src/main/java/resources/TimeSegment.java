@@ -9,7 +9,7 @@ public class TimeSegment {
 
 	@Override
 	public String toString() {
-		return "<From " + startTime + " to " + endTime + ">";
+		return "//From " + startTime + " to " + endTime + "\\";
 	}
 
 }
