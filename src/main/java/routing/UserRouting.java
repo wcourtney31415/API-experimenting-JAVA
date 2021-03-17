@@ -37,22 +37,21 @@ public class UserRouting {
 			String body = req.body();
 			Gson gson = new Gson();
 			// don't forget filtering
-			Userr user = null;
+			Userr user;
 			try {
+				String result = "Something went wrong! :(";
+
 				user = gson.fromJson(body, Userr.class);
-				System.out.println("Here: ");
-				for (String str : user.timeSegments) {
-					System.out.println(str);
+				try {
+					list.add(user);
+					result = "Successfully added new user! :)";
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			try {
-				list.add(user);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			System.out.println("Added it.");
+			
 			return "Completed post";
 		});
 
