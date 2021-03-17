@@ -9,7 +9,7 @@ import mongoDb.MongoTimeSegment;
 import resources.TimeSegment;
 
 public class TimeSegmentRouting {
-	static String routeStr = "/time";
+	static String routeStr = "/timeSegment";
 
 	public static void initialize() {
 		MongoTimeSegment list = new MongoTimeSegment();

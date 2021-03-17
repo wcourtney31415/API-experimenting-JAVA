@@ -5,37 +5,36 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
-import mongoDb.MongoCompany;
-import resources.Company;
+import mongoDb.MongoBox;
+import resources.Box;
 
-public class CompanyRouting {
-	static String dbName = "Time";
-	static String collectionName = "Company";
-	static String routeStr = "/company";
+public class BoxRouting {
+
+	static String routeStr = "/box";
 
 	public static void initialize() {
-		MongoCompany dbCompany = new MongoCompany();
+		MongoBox dbCompany = new MongoBox();
 
 		get(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
 			return dbCompany.get(idString);
 		});
 
-		get("/companies", (req, res) -> {
+		get(routeStr, (req, res) -> {
 			return dbCompany.get();
 		});
 
 		put(routeStr + "/:id", (req, res) -> {
 			String idString = req.params(":id");
-			Company company = new Company();
-			company.name = "was posted";
+			Box company = new Box();
+			company.boxName = "was posted";
 			dbCompany.update(idString, company);
 			return "Completed put";
 		});
 
 		post(routeStr, (req, res) -> {
-			Company company = new Company();
-			company.name = "newCompany";
+			Box company = new Box();
+			company.boxName = "newCompany";
 			dbCompany.add(company);
 			return "Completed post";
 		});

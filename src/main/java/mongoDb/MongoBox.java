@@ -5,14 +5,14 @@ import java.util.List;
 
 import com.mongodb.client.MongoCollection;
 
-import resources.Company;
+import resources.Box;
 
-public class MongoCompany extends MongoResource<Company> {
+public class MongoBox extends MongoResource<Box> {
 
-	MongoCollection<Company> companyCollection = getCollection("Company", Company.class);
+	MongoCollection<Box> companyCollection = getCollection("Company", Box.class);
 
 	@Override
-	public Company get(String idString) {
+	public Box get(String idString) {
 		return companyCollection
 				.find()
 				.filter(withId(idString))
@@ -20,19 +20,19 @@ public class MongoCompany extends MongoResource<Company> {
 	}
 
 	@Override
-	public List<Company> get() {
+	public List<Box> get() {
 		return companyCollection
 				.find()
-				.into(new ArrayList<Company>());
+				.into(new ArrayList<Box>());
 	}
 
 	@Override
-	public void add(Company comapny) {
+	public void add(Box comapny) {
 		companyCollection.insertOne(comapny);
 	}
 
 	@Override
-	public void update(String idString, Company company) {
+	public void update(String idString, Box company) {
 		companyCollection.replaceOne(withId(idString), company);
 	}
 
