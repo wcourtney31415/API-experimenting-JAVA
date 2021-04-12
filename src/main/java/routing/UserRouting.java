@@ -38,9 +38,8 @@ public class UserRouting {
 			Gson gson = new Gson();
 			// don't forget filtering
 			Userr user;
+			String result = "Something went wrong! :(";
 			try {
-				String result = "Something went wrong! :(";
-
 				user = gson.fromJson(body, Userr.class);
 				try {
 					list.add(user);
@@ -51,8 +50,8 @@ public class UserRouting {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			return "Completed post";
+
+			return result;
 		});
 
 		delete(routeStr + "/:id", (req, res) -> {

@@ -2,6 +2,8 @@ package resources;
 
 import org.bson.types.ObjectId;
 
+import com.google.gson.Gson;
+
 public class TimeSegment {
 	public ObjectId _id;
 	public String author;
@@ -9,7 +11,9 @@ public class TimeSegment {
 
 	@Override
 	public String toString() {
-		return "//From " + startTime + " to " + endTime + "\\";
+		Gson gson = new Gson();
+		
+		return gson.toJson(this);
 	}
 
 }

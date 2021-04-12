@@ -1,4 +1,5 @@
 package src.main.java.main;
+import static spark.Spark.get;
 import static spark.Spark.port;
 
 import org.slf4j.Logger;
@@ -18,6 +19,9 @@ public class App {
 		UserRouting.initialize();
 		TimeSegmentRouting.initialize();
 		BoxRouting.initialize();
+		get("/", (req, res) -> {
+			return "Welcome to my API.";
+		});
 	}
 
 }
