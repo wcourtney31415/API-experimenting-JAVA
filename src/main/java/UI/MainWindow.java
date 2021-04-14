@@ -109,27 +109,28 @@ public class MainWindow {
 		frame.getContentPane().add(btnFetchTimeSegments);
 	}
 	
-	private static List<TimeSegment> getTimeSegments(String url) {
-		
-		List<TimeSegment> timeSegments = new ArrayList<TimeSegment>();
-		
+	private static HttpResponse<String> makeGetRequest(String uri) {
 		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder(URI.create(url)).header("accept", "application/json").build();
+		HttpRequest request = 
+				HttpRequest.newBuilder(URI.create(uri))
+				.header("accept", "application/json")
+				.build();
 		HttpResponse<String> response = null;
-		
 		try {
 			response = client.send(request, BodyHandlers.ofString());
-			
-			Type listOfMyClassObject = new TypeToken<ArrayList<TimeSegment>>() {
-			}.getType();
-			
-			Gson gson = new Gson();
-			timeSegments = gson.fromJson((String) response.body(), listOfMyClassObject);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
+		return response;
+	}
+	
+	private static List<TimeSegment> getTimeSegments(String uri) {
+		List<TimeSegment> timeSegments = new ArrayList<TimeSegment>();
+		String body = makeGetRequest(uri).body();
+		Type listOfMyClassObject = new TypeToken<ArrayList<TimeSegment>>() {}.getType();
+		timeSegments = new Gson().fromJson(body, listOfMyClassObject);		
 		return timeSegments;
 	}
 
