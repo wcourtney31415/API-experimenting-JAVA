@@ -45,13 +45,12 @@ public class MainWindow {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		port(80);
-		UserRouting.initialize();
-		TimeSegmentRouting.initialize();
-		BoxRouting.initialize();
-		get("/", (req, res) -> {
-			return "Welcome to my API.";
-		});
+		initializeRouting(80);
+		initializeUI();
+		
+	}
+
+	private static void initializeUI() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -61,19 +60,24 @@ public class MainWindow {
 					e.printStackTrace();
 				}
 			}
-		});
+		});		
 	}
 
-	/**
-	 * Create the application.
-	 */
+	private static void initializeRouting(int port) {
+		port(port);
+		UserRouting.initialize();
+		TimeSegmentRouting.initialize();
+		BoxRouting.initialize();
+		get("/", (req, res) -> {
+			return "Welcome to my API.";
+		});		
+	}
+
 	public MainWindow() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 705, 460);
