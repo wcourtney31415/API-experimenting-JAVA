@@ -1,9 +1,13 @@
 package UI;
 
+import static spark.Spark.get;
+import static spark.Spark.port;
+
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -19,17 +23,33 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import routing.BoxRouting;
+import routing.TimeSegmentRouting;
+import routing.UserRouting;
 
 public class MainWindow {
 
 	private JFrame frame;
 
+	private static final Logger logger = LoggerFactory.getLogger(MainWindow.class);
+
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		port(80);
+		UserRouting.initialize();
+		TimeSegmentRouting.initialize();
+		BoxRouting.initialize();
+		get("/", (req, res) -> {
+			return "Welcome to my API.";
+		});
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -73,7 +93,7 @@ public class MainWindow {
 		JButton btnFetchTimeSegments = new JButton("Fetch Time Segments");
 		btnFetchTimeSegments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String uri = "http://localhost/timeSegments";
+				String uri = "http://localhost/timeSegment";
 				List<resources.TimeSegment> timeSegments = getTimeSegments(uri);
 				List<String> timeSegmentStrings = new ArrayList<String>();
 				for (resources.TimeSegment timeSegment : timeSegments) {
@@ -101,7 +121,7 @@ public class MainWindow {
 
 			List<resources.TimeSegment> inputList = new ArrayList<resources.TimeSegment>();
 
-			java.lang.reflect.Type listOfMyClassObject = new TypeToken<ArrayList<resources.TimeSegment>>() {
+			Type listOfMyClassObject = new TypeToken<ArrayList<resources.TimeSegment>>() {
 			}.getType();
 
 			outputList = gson.fromJson((String) response.body(), listOfMyClassObject);
