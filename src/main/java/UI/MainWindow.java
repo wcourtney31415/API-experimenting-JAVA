@@ -33,6 +33,7 @@ import resources.TimeSegment;
 import routing.BoxRouting;
 import routing.TimeSegmentRouting;
 import routing.UserRouting;
+import javax.swing.JSpinner;
 
 public class MainWindow {
 
@@ -89,14 +90,15 @@ public class MainWindow {
 		frame.getContentPane().add(lblWelcome);
 
 		JComboBox<String> cmbBox = new JComboBox<String>();
-		cmbBox.setBounds(10, 36, 135, 22);
+		cmbBox.setBounds(374, 36, 149, 22);
 		frame.getContentPane().add(cmbBox);
 
 		JList<String> lstTimeSegments = new JList<String>();
-		lstTimeSegments.setBounds(10, 69, 354, 341);
+		lstTimeSegments.setBounds(10, 36, 354, 374);
 		frame.getContentPane().add(lstTimeSegments);
 
 		JButton btnFetchTimeSegments = new JButton("Fetch Time Segments");
+		btnFetchTimeSegments.setBounds(374, 69, 149, 23);
 		btnFetchTimeSegments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String uri = "http://localhost/timeSegment";
@@ -109,8 +111,47 @@ public class MainWindow {
 
 			}
 		});
-		btnFetchTimeSegments.setBounds(229, 36, 135, 23);
 		frame.getContentPane().add(btnFetchTimeSegments);
+		
+		JSpinner spnStartHour = new JSpinner();
+		spnStartHour.setBounds(374, 173, 43, 20);
+		frame.getContentPane().add(spnStartHour);
+		
+		JSpinner spnStartMinute = new JSpinner();
+		spnStartMinute.setBounds(427, 173, 43, 20);
+		frame.getContentPane().add(spnStartMinute);
+		
+		JComboBox spnStartAmPm = new JComboBox();
+		spnStartAmPm.setBounds(480, 172, 43, 22);
+		frame.getContentPane().add(spnStartAmPm);
+		
+		JLabel lblNewLabel = new JLabel("Start Time: ");
+		lblNewLabel.setBounds(374, 148, 83, 14);
+		frame.getContentPane().add(lblNewLabel);
+		
+		JComboBox spnEndAmPm = new JComboBox();
+		spnEndAmPm.setBounds(480, 228, 43, 22);
+		frame.getContentPane().add(spnEndAmPm);
+		
+		JSpinner spnEndMinute = new JSpinner();
+		spnEndMinute.setBounds(427, 229, 43, 20);
+		frame.getContentPane().add(spnEndMinute);
+		
+		JSpinner spnEndHour = new JSpinner();
+		spnEndHour.setBounds(374, 229, 43, 20);
+		frame.getContentPane().add(spnEndHour);
+		
+		JLabel lblEndTime = new JLabel("End Time: ");
+		lblEndTime.setBounds(374, 204, 83, 14);
+		frame.getContentPane().add(lblEndTime);
+		
+		JButton btnAddTimeSeg = new JButton("Add Time Segment");
+		btnAddTimeSeg.setBounds(374, 261, 149, 23);
+		frame.getContentPane().add(btnAddTimeSeg);
+		
+		JButton btnRemoveSelected = new JButton("Remove Selected");
+		btnRemoveSelected.setBounds(374, 99, 149, 23);
+		frame.getContentPane().add(btnRemoveSelected);
 	}
 	
 	private static HttpResponse<String> makeGetRequest(String uri) {
@@ -143,5 +184,4 @@ public class MainWindow {
 		model.addAll(arrList);
 		jlist.setModel(model);
 	}
-
 }
